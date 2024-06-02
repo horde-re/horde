@@ -134,7 +134,6 @@ impl Binary {
 /// Trait for loading and unloading a binary file.
 pub trait Loadable {
     fn load(&mut self, path: PathBuf, binary_type: BinaryType) -> Result<Binary, String>;
-    fn unload(&mut self) -> Result<(), String>;
 }
 
 impl Loadable for Binary {
@@ -142,11 +141,5 @@ impl Loadable for Binary {
     fn load(&mut self, path: PathBuf, binary_type: BinaryType) -> Result<Binary, String> {
         todo!();
         Ok()
-    }
-
-    /// Unload the binary file.
-    fn unload(&mut self) -> Result<(), String> {
-        todo!();
-        Ok(())
     }
 }
