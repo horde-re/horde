@@ -4,7 +4,8 @@ pub mod symbol;
 
 use crate::loader::binary::{Binary, BinaryArch, BinaryType};
 use crate::loader::section::{Section, SectionType};
-use crate::loader::symbol::Symbol;
+
+use goblin::pe::section_table::IMAGE_SCN_CNT_CODE;
 use goblin::{error, Object};
 use std::path::PathBuf;
 
@@ -21,12 +22,18 @@ fn load_pe(buffer: &Vec<u8>) -> anyhow::Result<Binary> {
     // Load sections
     for section in &pe.sections {
         let name = String::from(section.name().unwrap_or("Unknown name"));
-        let address = section.virtual_address as u64;
+        let offset = section.pointer_to_raw_data as usize;
+        let address = section.virtual_address as u64 + pe.image_base as u64;
         let size = section.virtual_size as u64;
-        let content = buffer[section.pointer_to_raw_data as usize
-            ..(section.pointer_to_raw_data + section.virtual_size) as usize]
-            .to_vec();
-        let section_type = SectionType::Unknown;
+
+        let content = buffer[offset..(offset + size as usize)].to_vec();
+
+        // Not the best way to determine section type, but it works for now
+        let section_type = if section.characteristics & IMAGE_SCN_CNT_CODE != 0 {
+            SectionType::Code
+        } else {
+            SectionType::Data
+        };
 
         bin.sections
             .push(Section::new(name, address, size, content, section_type));
