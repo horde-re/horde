@@ -1,6 +1,6 @@
-mod binary;
-mod section;
-mod symbol;
+pub mod binary;
+pub mod section;
+pub mod symbol;
 
 use crate::loader::binary::{Binary, BinaryArch, BinaryType};
 use crate::loader::section::{Section, SectionType};
