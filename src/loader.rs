@@ -13,6 +13,7 @@ fn load_pe(buffer: &Vec<u8>) -> anyhow::Result<Binary> {
 
     let mut bin = Binary::default();
 
+    bin.binary_type = BinaryType::Pe;
     bin.binary_arch = BinaryArch::X86;
     bin.bits = if pe.is_64 { 64 } else { 32 };
     bin.entry = pe.entry as u64;
@@ -32,11 +33,12 @@ fn load_pe(buffer: &Vec<u8>) -> anyhow::Result<Binary> {
     }
 
     // Load symbols
-    todo!();
+    // todo!();
 
     Ok(bin)
 }
 
+#[allow(unused_variables)]
 fn load_elf(buffer: &Vec<u8>) -> anyhow::Result<Binary> {
     todo!();
 }
