@@ -32,7 +32,7 @@ impl Display for BinaryType {
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum BinaryArch {
     Unknown,
-    X86_64,
+    X86,
 }
 
 impl Default for BinaryArch {
@@ -45,7 +45,7 @@ impl Display for BinaryArch {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             Self::Unknown => write!(f, "Unknown architecture"),
-            Self::X86_64 => write!(f, "x86_64"),
+            Self::X86 => write!(f, "x86"),
         }
     }
 }
@@ -128,18 +128,5 @@ impl Binary {
     /// Get the text section of the binary file.
     pub fn get_text_section(&self) -> Option<&Section> {
         self.get_section_by_name(".text")
-    }
-}
-
-/// Trait for loading and unloading a binary file.
-pub trait Loadable {
-    fn load(&mut self, path: PathBuf, binary_type: BinaryType) -> Result<Binary, String>;
-}
-
-impl Loadable for Binary {
-    /// Load the binary file.
-    fn load(&mut self, path: PathBuf, binary_type: BinaryType) -> Result<Binary, String> {
-        todo!();
-        Ok()
     }
 }
