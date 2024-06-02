@@ -9,15 +9,16 @@ use goblin::pe::section_table::IMAGE_SCN_CNT_CODE;
 use goblin::{error, Object};
 use std::path::PathBuf;
 
-fn load_pe(buffer: &Vec<u8>) -> anyhow::Result<Binary> {
-    let pe = goblin::pe::PE::parse(&buffer)?;
+fn load_pe(buffer: &[u8]) -> anyhow::Result<Binary> {
+    let pe = goblin::pe::PE::parse(buffer)?;
 
-    let mut bin = Binary::default();
-
-    bin.binary_type = BinaryType::Pe;
-    bin.binary_arch = BinaryArch::X86;
-    bin.bits = if pe.is_64 { 64 } else { 32 };
-    bin.entry = pe.entry as u64;
+    let mut bin = Binary {
+        binary_type: BinaryType::Pe,
+        binary_arch: BinaryArch::X86,
+        bits: if pe.is_64 { 64 } else { 32 },
+        entry: pe.entry as u64,
+        ..Default::default()
+    };
 
     // Load sections
     for section in &pe.sections {
@@ -46,13 +47,19 @@ fn load_pe(buffer: &Vec<u8>) -> anyhow::Result<Binary> {
 }
 
 #[allow(unused_variables)]
-fn load_elf(buffer: &Vec<u8>) -> anyhow::Result<Binary> {
+fn load_elf(buffer: &[u8]) -> anyhow::Result<Binary> {
     todo!();
 }
 
 /// Load the binary file.
+/// If `binary_type` is `BinaryType::Auto`, the binary type will be auto-detected.
+/// Otherwise, the binary type will be used as specified.
+/// Returns a `Binary` struct.
+/// # Errors
+/// Returns an error if the binary format is not supported.
+#[allow(clippy::wildcard_in_or_patterns)]
 pub fn load(path: PathBuf, binary_type: BinaryType) -> anyhow::Result<Binary> {
-    let buffer = std::fs::read(&path)?;
+    let buffer = std::fs::read(path)?;
 
     // Auto detect binary type if not specified
     let bin_type = if binary_type == BinaryType::Auto {
