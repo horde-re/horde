@@ -5,17 +5,12 @@ use crate::loader::section::{Section, SectionType};
 use crate::loader::symbol::Symbol;
 
 /// Binary type
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Hash, Eq, PartialEq, Ord, PartialOrd, Default)]
 pub enum BinaryType {
+    #[default]
     Auto,
     Elf,
     Pe,
-}
-
-impl Default for BinaryType {
-    fn default() -> Self {
-        Self::Auto
-    }
 }
 
 impl Display for BinaryType {
@@ -29,16 +24,11 @@ impl Display for BinaryType {
 }
 
 /// Binary architecture
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Hash, Eq, PartialEq, Ord, PartialOrd, Default)]
 pub enum BinaryArch {
+    #[default]
     Unknown,
     X86,
-}
-
-impl Default for BinaryArch {
-    fn default() -> Self {
-        Self::Unknown
-    }
 }
 
 impl Display for BinaryArch {
@@ -51,7 +41,7 @@ impl Display for BinaryArch {
 }
 
 /// A binary file.
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, Hash, Eq, PartialEq, Ord, PartialOrd)]
 pub struct Binary {
     pub path: PathBuf,
     pub binary_type: BinaryType,

@@ -4,9 +4,11 @@ pub mod symbol;
 
 use crate::loader::binary::{Binary, BinaryArch, BinaryType};
 use crate::loader::section::{Section, SectionType};
+use crate::loader::symbol::{Symbol, SymbolType};
 
 use goblin::pe::section_table::IMAGE_SCN_CNT_CODE;
 use goblin::{error, Object};
+use std::borrow::Cow;
 use std::path::PathBuf;
 
 fn load_pe(buffer: &[u8]) -> anyhow::Result<Binary> {
@@ -41,7 +43,48 @@ fn load_pe(buffer: &[u8]) -> anyhow::Result<Binary> {
     }
 
     // Load symbols
-    // todo!();
+    // 1. Load imports
+    for import in pe.imports {
+        // Convert Cow to String
+        let symbol_name = match import.name {
+            Cow::Borrowed(name) => name.to_string(),
+            Cow::Owned(name) => name,
+        };
+        let lib_name = import.dll.to_string();
+        let address = import.rva as u64 + pe.image_base as u64; // convert rva to virtual address
+
+        // Determine symbol type by finding the section that contains it
+        let symbol_type = bin
+            .sections
+            .iter()
+            .find(|section| section.contains(address))
+            .map_or(SymbolType::Unknown, |section| {
+                println!(
+                    "Found section {:?}, type = {:?}",
+                    section.name, section.section_type
+                );
+
+                if section.section_type == SectionType::Code {
+                    SymbolType::Function
+                } else {
+                    SymbolType::Unknown // we don't support data yet
+                }
+            });
+
+        bin.symbols.push(Symbol::new(
+            symbol_name,
+            address,
+            symbol_type,
+            Some(lib_name),
+        ));
+    }
+
+    // temporarily print imports
+    // for symbol in &bin.symbols {
+    //     println!("{}", symbol);
+    // }
+
+    // 2. Load exports
 
     Ok(bin)
 }

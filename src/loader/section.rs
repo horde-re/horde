@@ -1,13 +1,14 @@
 /// The type of a section in a binary file.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Hash, Eq, PartialEq, Ord, PartialOrd, Default)]
 pub enum SectionType {
+    #[default]
     Unknown,
     Code,
     Data,
 }
 
 /// A section in a binary file.
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, Hash, Eq, PartialEq, Ord, PartialOrd, Default)]
 pub struct Section {
     pub name: String,
     pub address: u64, // virtual memory address
@@ -36,6 +37,6 @@ impl Section {
 
     /// Check if the given address is within the range of this section.
     pub fn contains(&self, address: u64) -> bool {
-        self.address >= address && address - self.address < self.size
+        address >= self.address && (address - self.address) < self.size
     }
 }

@@ -14,7 +14,7 @@ mod loader_tests {
         assert_eq!(bin.bits, 64);
         assert_eq!(bin.entry, 4900);
         assert_eq!(bin.sections.len(), 6);
-        assert_eq!(bin.symbols.len(), 0);
+        assert_eq!(bin.symbols.len(), 42);
     }
 
     fn assert_basic_pe_section(bin: &Binary) {
