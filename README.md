@@ -25,3 +25,9 @@ To-do
 **v0.3.0**
 - [ ] Assembling / disassembling for every supported architecture
 
+**v?**
+- [ ] Program instrumentation
+- [ ] Wrap Intel Pin tools
+- [ ] Dynamic taint analysis
+- [ ] Control-flow analysis
+- [ ] Symbolic and concolic execution
