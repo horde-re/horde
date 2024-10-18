@@ -6,8 +6,8 @@ mod loader_tests {
     use horde::loader::load;
     use horde::loader::section::*;
 
-    const PE_PATH: &str = "tests/bin/pe.bin";
-    // const ELF_PATH: &str = "tests/bin/elf.bin";
+    const PE_PATH: &str = "tests/fixtures/pe.bin";
+    // const ELF_PATH: &str = "tests/fixtures/elf.bin";
 
     fn assert_basic_pe_info(bin: &Binary) {
         assert_eq!(bin.binary_arch, BinaryArch::X86);
