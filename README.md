@@ -59,10 +59,3 @@ To-do
 ## 📚 Documentation
 
 To-do
-
-**v?**
-- [ ] Program instrumentation
-- [ ] Wrap Intel Pin tools
-- [ ] Dynamic taint analysis
-- [ ] Control-flow analysis
-- [ ] Symbolic and concolic execution
