@@ -1,12 +1,23 @@
 [package]
 name = "horde"
-description = "Rust binary analysis and reverse engineering framework with Python bindings"
+description = """
+Horde is a suite of binary analysis tools for reverse engineering made in Rust with Python bindings.
+It aims to ease the analysis, modifying and generation of binary programs with various techniques.
+"""
+
 version = "0.1.0"
 
 edition = "2021"
 readme = "README.md"
 license = "Apache-2.0"
-repository = "https://github.com/standard3/horde/"
+repository = "https://github.com/horde-re/horde/"
+
+authors = ["abel <67806187+standard3@users.noreply.github.com>"]
+
+[lib]
+name = "horde"
+# Read [Rust Reference Linkage](https://doc.rust-lang.org/reference/linkage.html)
+crate-type = ["lib", "cdylib"]
 
 [dependencies]
 anyhow = "1.0.86"
